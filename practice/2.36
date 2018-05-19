@@ -1,0 +1,4 @@
+int tmult_ok(int x, int y) {
+  long long sum_ll = (long long)x * (long long)y;
+  return sum_ll >= 0x80000000 && sum_ll <= 0x7fffffff;
+}

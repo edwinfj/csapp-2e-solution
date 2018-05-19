@@ -1,0 +1,4 @@
+int div16(int x) {
+  unsigned int y = x & 0x80000000;
+  return (x + (int)(y >> 27) - (int)(y >> 31)) >> 4;
+}

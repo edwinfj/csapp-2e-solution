@@ -1,0 +1,7 @@
+A. false when x = 0x80000000
+B. false when x = -7
+C. false when x = 0xE000, x * x is 0xc4000000
+D. true, when x >=0, -x never overflow
+E. false when x = 0x80000000
+F. true, same bit representation
+G. true, same bit representation
