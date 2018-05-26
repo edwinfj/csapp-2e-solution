@@ -1,0 +1,1 @@
+(sx && !sy) || !(sy && !sx) || (sx && sy && (ux >= uy)) || (ux <= uy)

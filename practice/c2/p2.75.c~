@@ -1,0 +1,4 @@
+unsigned unsigned_high_prod(unsigned x, unsigned y) {
+	int s_prod = signed_high_prod(x, y);
+	return s_prod + x + y;
+}
