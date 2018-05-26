@@ -1,5 +1,0 @@
-int tmult_ok(int x, int y) {
-  int sum_int = x * y;
-  long long sum_ll = (long long)x * (long long)y;
-  return sum_int == (sum_ll & 0xffffffff);
-}

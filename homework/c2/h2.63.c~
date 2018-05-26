@@ -1,0 +1,13 @@
+#include <stdio.h>
+
+unsigned srl(unsigned x, int k) {
+	unsigned xsra = (int) x >> k;
+	return xsra & ((1 << ((sizeof(unsigned) << 3) - k)) - 1);
+}
+
+int sra(int x, int k) {
+	int xsrl = (unsigned) x >> k;
+	int n = sizeof(unsigned) << 3;
+	int mask = (1 << n - 1);
+	return xsrl ^ ((0 - ((x & mask) == mask)) << (n - k));
+}	
