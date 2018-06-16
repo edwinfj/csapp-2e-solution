@@ -1,0 +1,19 @@
+13
+%edi holds i, %ecx holds j
+
+void transpose(Marray_t A) {
+	int i, j;
+	for (i = 0; i < M; ++i) {
+		int *p1 = A + i * M;
+		int *p2 = A + i;
+		for (j = 0; j < i; ++j) {
+			int t = *p2;
+			int tt = *p1;
+			*p1 = t;
+			++p1;
+			*p2 = tt;
+			p2 += M;
+		}
+	}
+}
+			

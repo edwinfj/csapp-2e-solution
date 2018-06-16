@@ -1,0 +1,5 @@
+int result = -1;
+int mask;
+for (mask = 1; mask != 0; mask <<= (n & 0xff)) {
+	result ^= x & mask;
+}

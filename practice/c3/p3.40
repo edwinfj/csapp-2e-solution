@@ -1,0 +1,17 @@
+short
+movw (%eax), %ax
+movw %ax, (%edx)
+short *
+leal 2(%eax), %eax
+movl %eax, (%edx)
+int *
+leal (%eax), %eax
+movl %eax, (%edx)
+int
+movl 4(%eax), %ecx
+movl (%eax, %ecx, 4), %eax
+movl %eax, (%edx)
+char
+movl 8(%eax), %eax
+movb (%eax), %al
+movb %al, (%edx)

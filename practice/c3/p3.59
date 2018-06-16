@@ -1,0 +1,22 @@
+int switch_prob(int x, int n)
+{
+	int result = x;
+	switch(n) {
+	case 0:
+	case 2:
+		result <<= 2;
+		break;
+	case 3:
+		result >>= 2;
+		break;
+	case 4:
+		result *= 3;
+	case 5:
+		result *= result;
+	case 1:
+	default
+		result += 10;
+		break;
+	}
+	return result;
+}	

@@ -1,0 +1,15 @@
+A.
+the mem location of return object result,
+s1.a,
+s1.p
+B.
+s2.diff
+s2.sum
+&y
+x
+&s2
+C.
+pass each elements in the structure to the function
+D.
+passing the address that will hold the return values as the 
+argument to the funciton

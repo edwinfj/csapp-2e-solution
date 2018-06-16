@@ -1,0 +1,5 @@
+short*	S + 2	leal 2(%edx),%eax
+short	*(S + 6)	movw 6(%edx),%ax
+short*	S + 2*i	leal (%edx, %ecx, 2),%eax
+short	*(S + 8i + 2)	movw 2(%edx, %ecx, 8),%ax
+short*	S + 2i - 10	leal -10(%edx, %ecx, 2),%eax

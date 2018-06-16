@@ -1,0 +1,5 @@
+0, 4, 8, 16, 20, 24, 32, 40
+48
+double, long long, char *, float, void *, short, char, char
+0, 8, 16, 20, 24, 28, 30, 31
+32 

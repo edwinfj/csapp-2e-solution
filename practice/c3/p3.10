@@ -1,0 +1,3 @@
+set register value to 0
+movl $0, %edx
+?

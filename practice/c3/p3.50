@@ -1,0 +1,1 @@
+void incrprob(int x, long *q, int *t);

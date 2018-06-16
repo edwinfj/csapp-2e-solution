@@ -1,0 +1,2 @@
+shrl $31, %edx
+divl 12(%ebp)

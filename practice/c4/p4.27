@@ -1,0 +1,5 @@
+A.
+latency: 300 + 20k
+tpt: 1/(20 + 300/k)
+B.
+register delay

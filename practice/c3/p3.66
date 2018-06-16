@@ -1,0 +1,7 @@
+A.
+9
+B.
+typedef struct {
+	int idx;
+	int x[4];
+}

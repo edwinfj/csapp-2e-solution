@@ -1,0 +1,8 @@
+for (i = 0; i < 8; ++i, x >>= 1) {
+	val = x & (0x0101010101010101L) + val;
+}
+	val = 0xff & ((val>>56)+(val>>48)+(val>>40)+(val>>32)+\
+			(val>>24)+(val>>16)+(val>>8)+val)
+	return val;
+
+count the 1s in x

@@ -1,0 +1,6 @@
+movslq	%edi, %rax
+movsbq	%dil, %rax
+movl	%edi, %eax
+movzbq	%dil, %rax
+movl	%edi, %eax
+movl	%edi, %eax

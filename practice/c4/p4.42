@@ -1,0 +1,4 @@
+# only for conditional move
+9 instructions
+0 bubble introduced
+CPI=1

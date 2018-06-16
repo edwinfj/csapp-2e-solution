@@ -1,0 +1,4 @@
+int decode2(int x, int y, int z) {
+	int b = (y - z) & 1;
+    return b ? ~(x * (y - z)) : (x * (y - z));
+}
