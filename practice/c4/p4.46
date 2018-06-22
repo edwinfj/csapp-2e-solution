@@ -1,0 +1,14 @@
+void bubble_a(int *data, int count) {
+	int i, last, t, arb;
+	for (last = count - 1; last > 0; --last) {
+		for (i = 0; i < last; ++i) {
+			arb = data[i+1] < data[i];
+			if (arb)
+				t = data[i+1];
+			if (arb)
+				data[i+1] = data[i];
+			if (arb)
+				data[i] = t;
+		}
+	}
+}	

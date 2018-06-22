@@ -1,7 +1,7 @@
 int switch_prob(int x, int n)
 {
 	int result = x;
-	switch(n) {
+	switch(n-50) {
 	case 0:
 	case 2:
 		result <<= 2;
