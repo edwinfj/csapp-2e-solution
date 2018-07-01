@@ -1,0 +1,4 @@
+A. move elem[1:999] to [0:998], elem[999] remains the same
+B. copy elem[0] to elem[1:999]
+C. A does not have data dependency. B has data dependency induced by store of current element and load of next element.
+D. no data dependency. CPE 2.

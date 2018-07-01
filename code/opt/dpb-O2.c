@@ -1548,29 +1548,19 @@ void unroll12aa_combine(vec_ptr v, data_t *dest)
 typedef data_t vec_t __attribute__ ((vector_size(VBYTES)));
 /* $end simd_vec_t */
 
-/* $begin simd_pack_t */
-typedef union {
-    vec_t v;
-    data_t d[VSIZE];
-} pack_t;
-/* $end simd_pack_t */
-
 char simd_v1_descr[] = "simd_v1: SSE code, 1*VSIZE-way parallelism";
 /* $begin simd_combine-c */
 void simd_v1_combine(vec_ptr v, data_t *dest)
 {
     long i;
-    pack_t xfer;
     vec_t accum;
     data_t *data = get_vec_start(v);
     int cnt = vec_length(v);
     data_t result = IDENT;
 
-    /* Initialize accum entries to IDENT */
+    /* Initialize all accum entries to IDENT */
     for (i = 0; i < VSIZE; i++) //line:opt:simd:initstart
-	xfer.d[i] = IDENT;
-    accum = xfer.v;             //line:opt:simd:initend
-    /* $end simd_init-c */
+	accum[i] = IDENT;  //line:opt:simd:initend
 
     /* Single step until have memory alignment */
     while ((((size_t) data) % VBYTES) != 0 && cnt) {  //line:opt:simd:startstart
@@ -1593,9 +1583,8 @@ void simd_v1_combine(vec_ptr v, data_t *dest)
     } //line:opt:simd:loopfinishend
 
     /* Combine elements of accumulator vector */
-    xfer.v = accum; //line:opt:simd:finishstart
-    for (i = 0; i < VSIZE; i++)
-	result = result OP xfer.d[i]; //line:opt:simd:finishend
+    for (i = 0; i < VSIZE; i++) //line:opt:simd:accumfinishstart
+	result = result OP accum[i]; //line:opt:simd:accumfinishend
 
     /* Store result */
     *dest = result; 
@@ -1607,17 +1596,15 @@ char simd_v2_descr[] = "simd_v2: SSE code, 2*VSIZE-way parallelism";
 void simd_v2_combine(vec_ptr v, data_t *dest)
 {
     long i;
-    pack_t xfer;
     vec_t accum0, accum1;
     data_t *data = get_vec_start(v);
     int cnt = vec_length(v);
     data_t result = IDENT;
 
-    /* Initialize to accum IDENT */
+    /* Initialize accum entries to IDENT */
     for (i = 0; i < VSIZE; i++)
-	xfer.d[i] = IDENT;
-    accum0 = xfer.v;
-    accum1 = xfer.v;
+	accum0[i] = IDENT;
+    accum1 = accum0;
 
     /* Single step until have memory alignment */
     while ((((size_t) data) % VBYTES) != 0 && cnt) {
@@ -1637,9 +1624,9 @@ void simd_v2_combine(vec_ptr v, data_t *dest)
 	result = result OP *data++;
 	cnt--;
     }
-    xfer.v = accum0 OP accum1;
+    accum0 = accum0 OP accum1;
     for (i = 0; i < VSIZE; i++)
-	result = result OP xfer.d[i];
+	result = result OP accum0[i];
     *dest = result;
 }
 
@@ -1647,7 +1634,6 @@ char simd_v4_descr[] = "simd_v4: SSE code, 4*VSIZE-way parallelism";
 void simd_v4_combine(vec_ptr v, data_t *dest)
 {
     long i;
-    pack_t xfer;
     data_t *data = get_vec_start(v);
     int cnt = vec_length(v);
     data_t result = IDENT;
@@ -1655,9 +1641,10 @@ void simd_v4_combine(vec_ptr v, data_t *dest)
     /* Create 4 accumulators and initialize elements to IDENT */
     vec_t accum0, accum1, accum2, accum3;
     for (i = 0; i < VSIZE; i++)
-	xfer.d[i] = IDENT;
-    accum0 = xfer.v; accum1 = xfer.v;
-    accum2 = xfer.v; accum3 = xfer.v;
+	accum0[i] = IDENT;
+    accum1 = accum0 ;
+    accum2 = accum0;
+    accum3 = accum0;
     
     /* Single step until have memory alignment */
     while ((((size_t) data) % VBYTES) != 0 && cnt) {
@@ -1688,11 +1675,11 @@ void simd_v4_combine(vec_ptr v, data_t *dest)
 
     /* $begin simd_v4_accum-c */
     /* Combine into single accumulator */
-    xfer.v = (accum0 OP accum1) OP (accum2 OP accum3);
+    accum0 = (accum0 OP accum1) OP (accum2 OP accum3);
 
     /* Combine results from accumulators within vector */
     for (i = 0; i < VSIZE; i++)
-	result = result OP xfer.d[i];
+	result = result OP accum0[i];
     /* $end simd_v4_accum-c */
     *dest = result;
 }
@@ -1701,23 +1688,21 @@ char simd_v8_descr[] = "simd_v8: SSE code, 8*VSIZE-way parallelism";
 void simd_v8_combine(vec_ptr v, data_t *dest)
 {
     long i;
-    pack_t xfer;
     vec_t accum0, accum1, accum2, accum3, accum4, accum5, accum6, accum7;
     data_t *data = get_vec_start(v);
     int cnt = vec_length(v);
     data_t result = IDENT;
 
-    /* Initialize to accum IDENT */
+    /* Initialize accum to IDENT */
     for (i = 0; i < VSIZE; i++)
-	xfer.d[i] = IDENT;
-    accum0 = xfer.v;
-    accum1 = xfer.v;
-    accum2 = xfer.v;
-    accum3 = xfer.v;
-    accum4 = xfer.v;
-    accum5 = xfer.v;
-    accum6 = xfer.v;
-    accum7 = xfer.v;
+	accum0[i] = IDENT;
+    accum1 = accum0;
+    accum2 = accum0;
+    accum3 = accum0;
+    accum4 = accum0;
+    accum5 = accum0;
+    accum6 = accum0;
+    accum7 = accum0;
     
     /* Single step until have memory alignment */
     while ((((size_t) data) % VBYTES) != 0 && cnt) {
@@ -1749,10 +1734,10 @@ void simd_v8_combine(vec_ptr v, data_t *dest)
 	result = result OP *data++;
 	cnt--;
     }
-    xfer.v = (accum0 OP accum1) OP (accum2 OP accum3);
-    xfer.v = xfer.v OP (accum4 OP accum5) OP (accum6 OP accum7);
+    accum0 = (accum0 OP accum1) OP (accum2 OP accum3);
+    accum0 = accum0 OP (accum4 OP accum5) OP (accum6 OP accum7);
     for (i = 0; i < VSIZE; i++)
-	result = result OP xfer.d[i];
+	result = result OP accum0[i];
     *dest = result;
 }
 
@@ -1760,25 +1745,23 @@ char simd_v10_descr[] = "simd_v10: SSE code, 10*VSIZE-way parallelism";
 void simd_v10_combine(vec_ptr v, data_t *dest)
 {
     long i;
-    pack_t xfer;
     vec_t accum0, accum1, accum2, accum3, accum4, accum5, accum6, accum7, accum8, accum9;
     data_t *data = get_vec_start(v);
     int cnt = vec_length(v);
     data_t result = IDENT;
 
-    /* Initialize to accum IDENT */
+    /* Initialize accum to IDENT */
     for (i = 0; i < VSIZE; i++)
-	xfer.d[i] = IDENT;
-    accum0 = xfer.v;
-    accum1 = xfer.v;
-    accum2 = xfer.v;
-    accum3 = xfer.v;
-    accum4 = xfer.v;
-    accum5 = xfer.v;
-    accum6 = xfer.v;
-    accum7 = xfer.v;
-    accum8 = xfer.v;
-    accum9 = xfer.v;
+	accum0[i] = IDENT;
+    accum1 = accum0;
+    accum2 = accum0;
+    accum3 = accum0;
+    accum4 = accum0;
+    accum5 = accum0;
+    accum6 = accum0;
+    accum7 = accum0;
+    accum8 = accum0;
+    accum9 = accum0;
     
     /* Single step until have memory alignment */
     while ((((size_t) data) % VBYTES) != 0 && cnt) {
@@ -1814,11 +1797,11 @@ void simd_v10_combine(vec_ptr v, data_t *dest)
 	result = result OP *data++;
 	cnt--;
     }
-    xfer.v = (accum0 OP accum1) OP (accum2 OP accum3);
-    xfer.v = xfer.v OP (accum4 OP accum5) OP (accum6 OP accum7);
-    xfer.v = xfer.v OP (accum8 OP accum9);
+    accum0 = (accum0 OP accum1) OP (accum2 OP accum3);
+    accum0 = accum0 OP (accum4 OP accum5) OP (accum6 OP accum7);
+    accum0 = accum0 OP (accum8 OP accum9);
     for (i = 0; i < VSIZE; i++)
-	result = result OP xfer.d[i];
+	result = result OP accum0[i];
     *dest = result;
 }
 
@@ -1826,28 +1809,26 @@ char simd_v12_descr[] = "simd_v12: SSE code, 12*VSIZE-way parallelism";
 void simd_v12_combine(vec_ptr v, data_t *dest)
 {
     long i;
-    pack_t xfer;
     vec_t accum0, accum1, accum2, accum3, accum4, accum5, accum6, accum7;
     vec_t accum8, accum9, accum10, accum11;
     data_t *data = get_vec_start(v);
     int cnt = vec_length(v);
     data_t result = IDENT;
 
-    /* Initialize to accum IDENT */
+    /* Initialize accum to IDENT */
     for (i = 0; i < VSIZE; i++)
-	xfer.d[i] = IDENT;
-    accum0 = xfer.v;
-    accum1 = xfer.v;
-    accum2 = xfer.v;
-    accum3 = xfer.v;
-    accum4 = xfer.v;
-    accum5 = xfer.v;
-    accum6 = xfer.v;
-    accum7 = xfer.v;
-    accum8 = xfer.v;
-    accum9 = xfer.v;
-    accum10 = xfer.v;
-    accum11 = xfer.v;
+	accum0[i] = IDENT;
+    accum1 = accum0;
+    accum2 = accum0;
+    accum3 = accum0;
+    accum4 = accum0;
+    accum5 = accum0;
+    accum6 = accum0;
+    accum7 = accum0;
+    accum8 = accum0;
+    accum9 = accum0;
+    accum10 = accum0;
+    accum11 = accum0;
 
     /* Single step until have memory alignment */
     while ((((size_t) data) % VBYTES) != 0 && cnt) {
@@ -1887,11 +1868,11 @@ void simd_v12_combine(vec_ptr v, data_t *dest)
 	result = result OP *data++;
 	cnt--;
     }
-    xfer.v = (accum0 OP accum1) OP (accum2 OP accum3);
-    xfer.v = xfer.v OP (accum4 OP accum5) OP (accum6 OP accum7);
-    xfer.v = xfer.v OP (accum8 OP accum9) OP (accum10 OP accum11);
+    accum0 = (accum0 OP accum1) OP (accum2 OP accum3);
+    accum0 = accum0 OP (accum4 OP accum5) OP (accum6 OP accum7);
+    accum0 = accum0 OP (accum8 OP accum9) OP (accum10 OP accum11);
     for (i = 0; i < VSIZE; i++)
-	result = result OP xfer.d[i];
+	result = result OP accum0[i];
     *dest = result;
 }
 
@@ -1900,16 +1881,17 @@ char simd_v2a_descr[] = "simd_v2a: SSE code, 2*VSIZE-way parallelism, reassociat
 void simd_v2a_combine(vec_ptr v, data_t *dest)
 {
     long i;
-    pack_t xfer;
-    vec_t accum;
     data_t *data = get_vec_start(v);
     int cnt = vec_length(v);
     data_t result = IDENT;
 
-    /* Initialize accum to IDENT */
+    /* $begin simd_ref */
+    /* Declare vector and intialize elements to IDENT */
+    vec_t accum;
+
     for (i = 0; i < VSIZE; i++)
-	xfer.d[i] = IDENT;
-    accum = xfer.v;
+	accum[i] = IDENT;
+    /* $end simd_ref */
 
     /* Single step until have memory alignment */
     while ((((size_t) data) % VBYTES) != 0 && cnt) {
@@ -1928,9 +1910,8 @@ void simd_v2a_combine(vec_ptr v, data_t *dest)
 	result = result OP *data++;
 	cnt--;
     }
-    xfer.v = accum;
     for (i = 0; i < VSIZE; i++)
-	result = result OP xfer.d[i];
+	result = result OP accum[i];
     *dest = result;
 }
 
@@ -1938,7 +1919,6 @@ char simd_v4a_descr[] = "simd_v4a: SSE code, 4*VSIZE-way parallelism, reassociat
 void simd_v4a_combine(vec_ptr v, data_t *dest)
 {
     long i;
-    pack_t xfer;
     vec_t accum;
     data_t *data = get_vec_start(v);
     int cnt = vec_length(v);
@@ -1946,8 +1926,7 @@ void simd_v4a_combine(vec_ptr v, data_t *dest)
 
     /* Initialize accum to IDENT */
     for (i = 0; i < VSIZE; i++)
-	xfer.d[i] = IDENT;
-    accum = xfer.v;
+	accum[i] = IDENT;
 
     /* Single step until have memory alignment */
     while ((((size_t) data) % VBYTES) != 0 && cnt) {
@@ -1972,9 +1951,9 @@ void simd_v4a_combine(vec_ptr v, data_t *dest)
 	result = result OP *data++;
 	cnt--;
     }
-    xfer.v = accum;
+
     for (i = 0; i < VSIZE; i++)
-	result = result OP xfer.d[i];
+	result = result OP accum[i];
     *dest = result;
 }
 
@@ -1982,7 +1961,6 @@ char simd_v8a_descr[] = "simd_v8a: SSE code, 8*VSIZE-way parallelism, reassociat
 void simd_v8a_combine(vec_ptr v, data_t *dest)
 {
     long i;
-    pack_t xfer;
     vec_t accum;
     data_t *data = get_vec_start(v);
     int cnt = vec_length(v);
@@ -1990,8 +1968,7 @@ void simd_v8a_combine(vec_ptr v, data_t *dest)
 
     /* Initialize accum to IDENT */
     for (i = 0; i < VSIZE; i++)
-	xfer.d[i] = IDENT;
-    accum = xfer.v;
+	accum[i] = IDENT;
 
     /* Single step until have memory alignment */
     while ((((size_t) data) % VBYTES) != 0 && cnt) {
@@ -2019,9 +1996,8 @@ void simd_v8a_combine(vec_ptr v, data_t *dest)
 	result = result OP *data++;
 	cnt--;
     }
-    xfer.v = accum;
     for (i = 0; i < VSIZE; i++)
-	result = result OP xfer.d[i];
+	result = result OP accum[i];
     *dest = result;
 }
 
