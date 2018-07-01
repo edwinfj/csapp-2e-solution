@@ -1,0 +1,35 @@
+void *advanced_memset(void *s, int c, size_t n)
+{
+  size_t k = sizeof(unsigned long);
+  unsigned char *schar = s;
+  unsigned long mask = (~((1UL<<k) - 1));
+  unsigned long *slong_s = (schar + k - 1) & mask;
+  unsigned long *slong_e = (schar + n) & mask;
+  unsigned char *schar_s = (unsigned char*) slong_s;
+  unsigned char *schar_e = (unsigned char*) slong_e;
+  unsigned char *schar_end = schar + n;
+
+  unsigned char cc = (unsigned char) c;
+  unsigned long val = 0 | cc;
+
+  if (schar_end < schar_e) {
+    while (schar < schar_end)
+	  *schar++ = cc;
+	
+	return s;
+  }
+
+  for (size_t i = 1; i < k; i *= 2)
+    val |= val << (i * 8);
+
+  while (schar < schar_s)
+    *schar++ = cc;
+  
+  while (slong_s < slong_e)
+    *slong_s++ = val;
+
+  while (schar_e < schar_end)
+    *schar_e++ = cc;
+
+  return s;
+}

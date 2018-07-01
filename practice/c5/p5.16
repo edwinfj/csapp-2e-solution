@@ -1,0 +1,25 @@
+void inner4(vec_ptr u, vec_ptr v, data *dest)
+{
+  long int i;
+  int length = vec_length(u);
+  int limit = length - 3;
+  data_t *udata = get_vec_start(u);
+  data_t *vdata = get_vec_start(v);
+  data_t sum = (data_t) 0;
+
+  for (i = 0; i < limit; i += 4) {
+    sum = sum + udata[i] * vdata[i] +\
+	            udata[i+1] * vdata[i+1] +\
+				udata[i+2] * vdata[i+2] +\
+				udata[i+3] * vdata[i+3];
+  }
+
+  for (; i < length; ++i) {
+    sum += udata[i] * vdata[i];
+  }
+
+  *dest = sum;
+}
+
+A. because on average there are two loads per element, and there is only one load unit. The issue time of load unit is 1 clock cycle. So the lower bound is 2.
+B. the critcal path is still the lower bound.

@@ -1,0 +1,6 @@
+for (int i = 0; i < limit; i += 4) {
+  sum += (udata[i] * vdata[i] +\
+          udata[i+1] * vdata[i+1] +\
+		  udata[i+2] * vdata[i+2] +\
+		  udata[i+3] * vdata[i+3]);
+}

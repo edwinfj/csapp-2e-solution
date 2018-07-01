@@ -1,0 +1,22 @@
+void psum(float a[], float p[], long int n)
+{
+  float sum = 0;
+  float a0, a1, a2;
+  long i;
+
+  for (i = 0; i < n - 2; i += 3) {
+	a0 = a[i];
+	a1 = a[i+1];
+	a2 = a[i+2];
+	p[i] = sum + a0;
+	p[i+1] = sum + a0 + a1;
+	p[i+2] = sum + a0 + a1 + a2;
+    sum += (a0 + a1 + a2);
+  }
+
+  for (; i < n; ++i) {
+	sum += a[i];
+    p[i] = sum;
+  }
+}
+

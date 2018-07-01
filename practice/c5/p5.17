@@ -1,0 +1,27 @@
+void inner4(vec_ptr u, vec_ptr v, data *dest)
+{
+  long int i;
+  int length = vec_length(u);
+  int limit = length - 3;
+  data *udata = get_vec_start(u);
+  data *vdata = get_vec_start(v);
+  data_t sum1 = (data_t) 0;
+  data_t sum2 = sum1;
+  data_t sum3 = sum1;
+  data_t sum4 = sum1;
+
+  for (i = 0; i < limit; i += 4) {
+    sum1 += udata[i] * vdata[i];
+	sum2 += udata[i+1] * vdata[i+1];
+	sum3 += udata[i+2] * vdata[i+2];
+	sum4 += udata[i+3] * vdata[i+3];
+  }
+
+  for (; i < length; ++i) {
+    sum1 += udata[i] * vdata[i];
+  }
+
+  *dest = sum1 + sum2 + sum3 + sum4;
+}
+A. two load per element, one load unit, load issue time 1.
+B. register spilling, extra mem access

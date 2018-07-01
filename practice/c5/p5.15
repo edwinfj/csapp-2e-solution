@@ -1,0 +1,4 @@
+A. critical path: %xmm1 -> add -> %xmm1. Note that two load per element may give another limit on the CPE
+B. 3
+C. 1
+D. the multiplication can be fully pipelined. the FU for float point mul has issue time of 1, each clock cycle can start a new mul
