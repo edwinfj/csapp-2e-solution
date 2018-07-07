@@ -1,0 +1,7 @@
+T_avg_RL = 1/2 / 15000 * 60000 = 2ms
+T_t = 1 / 15000 * 60000 / 1000 = 0.004ms
+2MB / 512B = 4096 blocks = 5 tracks
+A.
+T_seek + T_RL + T_t * 4096 = 22.396ms
+B.
+4096 * (T_seek + T_RL + T_t) = 24.6s

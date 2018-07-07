@@ -1,0 +1,15 @@
+src stride 1, dst stride dim, spatial locality is fixed.
+but temporal locality can be played with.
+
+my cpu:
+- 32K L1 cache
+- 8 way
+- 64 set
+- 64 byte Block
+
+split the two large matrices to small matrices, transpose per small matrix pair. Hope:
+1. the data of the matrix pair all fit in the L1 cache
+2. reduce the conflict miss
+
+the worst case, dim is 1024N (4096B), then each row maps to the same set. The L1 cache can hold at most 8 rows at a time.
+Each line can hold 16 ints.
