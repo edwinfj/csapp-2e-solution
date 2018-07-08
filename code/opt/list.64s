@@ -8,171 +8,168 @@ list_len:
 	movq	(%rdi), %rdi
 	testq	%rdi, %rdi
 	jne	.L3
-	rep; ret
+	rep ret
 .L4:
 	movl	$0, %eax
 	ret
 
 list_len_clear:
 	testq	%rdi, %rdi
-	je	.L8
+	je	.L9
 	movl	$0, %eax
-.L7:
+.L8:
 	movq	$0, 8(%rdi)
 	movq	(%rdi), %rdi
 	addq	$1, %rax
 	testq	%rdi, %rdi
-	jne	.L7
-	rep; ret
-.L8:
+	jne	.L8
+	rep ret
+.L9:
 	movl	$0, %eax
 	ret
 
 list_sum_clear:
 	testq	%rdi, %rdi
-	je	.L12
+	je	.L14
 	movl	$0, %eax
-.L11:
+.L13:
 	addq	8(%rdi), %rax
 	movq	$0, 8(%rdi)
 	movq	(%rdi), %rdi
 	testq	%rdi, %rdi
-	jne	.L11
-	rep; ret
-.L12:
+	jne	.L13
+	rep ret
+.L14:
 	movl	$0, %eax
 	ret
 
 list_sum:
 	testq	%rdi, %rdi
-	je	.L16
+	je	.L19
 	movl	$0, %eax
-.L15:
+.L18:
 	addq	8(%rdi), %rax
 	movq	(%rdi), %rdi
 	testq	%rdi, %rdi
-	jne	.L15
-	rep; ret
-.L16:
+	jne	.L18
+	rep ret
+.L19:
 	movl	$0, %eax
 	ret
 
 list_sum2:
-	testq	%rdi, %rdi
-	je	.L20
-	movl	$0, %eax
-.L19:
-	movq	(%rdi), %rdx
-	addq	8(%rdi), %rax
-	testq	%rdx, %rdx
-	je	.L18
-	movq	%rdx, %rdi
-	jmp	.L19
-.L20:
-	movl	$0, %eax
-.L18:
-	rep; ret
-pipe_sum2:
 	testq	%rdi, %rdi
 	je	.L24
 	movl	$0, %eax
 .L23:
 	movq	(%rdi), %rdx
 	addq	8(%rdi), %rax
-	testq	%rdx, %rdx
-	je	.L22
 	movq	%rdx, %rdi
-	jmp	.L23
+	testq	%rdx, %rdx
+	jne	.L23
+	rep ret
 .L24:
 	movl	$0, %eax
-.L22:
-	rep; ret
+	ret
+
+pipe_sum2:
+	testq	%rdi, %rdi
+	je	.L29
+	movl	$0, %eax
+.L28:
+	movq	(%rdi), %rdx
+	addq	8(%rdi), %rax
+	movq	%rdx, %rdi
+	testq	%rdx, %rdx
+	jne	.L28
+	rep ret
+.L29:
+	movl	$0, %eax
+	ret
+
 rlist_len:
 	movl	$0, %eax
 	testq	%rdi, %rdi
-	je	.L30
+	je	.L36
 	subq	$8, %rsp
 	movq	(%rdi), %rdi
 	call	rlist_len
 	addq	$1, %rax
 	addq	$8, %rsp
-.L30:
-	rep; ret
+.L36:
+	rep ret
 rlist_sum:
-	pushq	%rbx
-	movq	%rdi, %rbx
 	movl	$0, %eax
 	testq	%rdi, %rdi
-	je	.L32
+	je	.L42
+	pushq	%rbx
+	movq	%rdi, %rbx
 	movq	(%rdi), %rdi
 	call	rlist_sum
 	addq	8(%rbx), %rax
-.L32:
 	popq	%rbx
-	ret
-
+.L42:
+	rep ret
 list_copy:
 	testq	%rdi, %rdi
-	je	.L35
+	je	.L43
 	testq	%rsi, %rsi
-	je	.L35
-.L37:
+	je	.L43
+.L47:
 	movq	8(%rdi), %rax
 	movq	%rax, 8(%rsi)
 	movq	(%rdi), %rdi
 	movq	(%rsi), %rsi
-	testq	%rsi, %rsi
-	je	.L35
 	testq	%rdi, %rdi
-	jne	.L37
-.L35:
-	rep; ret
+	je	.L43
+	testq	%rsi, %rsi
+	jne	.L47
+.L43:
+	rep ret
 plist_copy:
 	testq	%rdi, %rdi
-	je	.L38
+	je	.L49
 	testq	%rsi, %rsi
-	je	.L38
-.L40:
-	movq	(%rsi), %rax
-	movq	(%rdi), %rdx
+	je	.L49
+.L53:
+	movq	(%rsi), %rdx
+	movq	(%rdi), %rax
 	movq	8(%rdi), %rcx
 	movq	%rcx, 8(%rsi)
+	movq	%rax, %rdi
+	movq	%rdx, %rsi
 	testq	%rax, %rax
-	je	.L38
+	je	.L49
 	testq	%rdx, %rdx
-	je	.L38
-	movq	%rdx, %rdi
-	movq	%rax, %rsi
-	jmp	.L40
-.L38:
-	rep; ret
+	jne	.L53
+.L49:
+	rep ret
 plist_copy2:
 	testq	%rdi, %rdi
-	je	.L41
+	je	.L55
 	testq	%rsi, %rsi
-	je	.L41
-.L43:
-	movq	(%rdi), %rdx
-	movq	(%rsi), %rax
+	je	.L55
+.L59:
+	movq	(%rdi), %rax
+	movq	(%rsi), %rdx
 	movq	8(%rdi), %rcx
 	movq	%rcx, 8(%rsi)
+	movq	%rax, %rdi
+	movq	%rdx, %rsi
 	testq	%rax, %rax
-	je	.L41
+	je	.L55
 	testq	%rdx, %rdx
-	je	.L41
-	movq	%rax, %rsi
-	movq	%rdx, %rdi
-	jmp	.L43
-.L41:
-	rep; ret
+	jne	.L59
+.L55:
+	rep ret
 stationary_copy:
 	movl	$1024, %eax
-.L46:
+.L62:
 	movq	8(%rdi), %rdx
 	movq	%rdx, 8(%rsi)
 	subq	$1, %rax
-	jne	.L46
-	rep; ret
+	jne	.L62
+	rep ret
 test:
 	pushq	%rbp
 	pushq	%rbx
@@ -245,22 +242,23 @@ test2c:
 	ret
 
 mylink:
-	leaq	-1(%rdi), %rcx
-	testq	%rcx, %rcx
-	jle	.L56
+	leaq	-1(%rdi), %rsi
+	testq	%rsi, %rsi
+	jle	.L73
 	movl	$main_list+16, %eax
+	movq	%rsi, %rcx
 	movl	$0, %edx
-.L57:
+.L74:
 	movq	%rdx, -8(%rax)
 	addq	$1, %rdx
 	movq	%rax, -16(%rax)
 	addq	$16, %rax
 	cmpq	%rcx, %rdx
-	jne	.L57
-.L56:
-	movq	%rcx, %rax
+	jne	.L74
+.L73:
+	movq	%rsi, %rax
 	salq	$4, %rax
-	movq	%rcx, main_list+8(%rax)
+	movq	%rsi, main_list+8(%rax)
 	movq	$0, main_list(%rax)
 	ret
 
@@ -269,7 +267,7 @@ main:
 	pushq	%rbx
 	subq	$8, %rsp
 	movl	$0, %ebx
-.L61:
+.L77:
 	movl	$1024, %edi
 	call	mylink
 	movl	$main_list, %edi
@@ -291,10 +289,10 @@ main:
 	call	__printf_chk
 	addq	$1, %rbx
 	cmpq	$8, %rbx
-	jne	.L61
+	jne	.L77
 	movl	$0, %ebp
-	jmp	.L60
-.L64:
+	jmp	.L78
+.L79:
 	movl	$1024, %edi
 	call	mylink
 	movq	case2_descr(%rbx), %rcx
@@ -313,14 +311,14 @@ main:
 	call	__printf_chk
 	addq	$8, %rbx
 	cmpq	$24, %rbx
-	jne	.L64
+	jne	.L79
 	addq	$1, %rbp
 	cmpq	$4, %rbp
-	je	.L63
-.L60:
+	je	.L80
+.L78:
 	movl	$0, %ebx
-	jmp	.L64
-.L63:
+	jmp	.L79
+.L80:
 	movl	$0, %eax
 	addq	$8, %rsp
 	popq	%rbx

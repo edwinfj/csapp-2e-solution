@@ -19,27 +19,27 @@ aprod:
 .L2:
 	cmpq	%rax, %rsi
 	jle	.L4
-.L5:
+.L7:
 	vmulsd	(%rdi,%rax,8), %xmm0, %xmm0
 	addq	$1, %rax
-	cmpq	%rsi, %rax
-	jne	.L5
+	cmpq	%rax, %rsi
+	jne	.L7
 .L4:
-	rep; ret
+	rep ret
 aprod1:
 	testq	%rsi, %rsi
-	jle	.L10
+	jle	.L13
 	vmovsd	.LC0(%rip), %xmm0
 	movl	$0, %eax
-.L9:
+.L12:
 	vmulsd	(%rdi,%rax,8), %xmm0, %xmm0
 	vmulsd	8(%rdi,%rax,8), %xmm0, %xmm0
 	vmulsd	16(%rdi,%rax,8), %xmm0, %xmm0
 	addq	$3, %rax
 	cmpq	%rax, %rsi
-	jg	.L9
-	rep; ret
-.L10:
+	jg	.L12
+	rep ret
+.L13:
 	vmovsd	.LC0(%rip), %xmm0
 	ret
 
@@ -52,19 +52,19 @@ t1:
 
 aprod2:
 	testq	%rsi, %rsi
-	jle	.L15
+	jle	.L19
 	vmovsd	.LC0(%rip), %xmm0
 	movl	$0, %eax
-.L14:
+.L18:
 	vmovsd	(%rdi,%rax,8), %xmm1
 	vmulsd	8(%rdi,%rax,8), %xmm1, %xmm1
 	vmulsd	%xmm0, %xmm1, %xmm0
 	vmulsd	16(%rdi,%rax,8), %xmm0, %xmm0
 	addq	$3, %rax
 	cmpq	%rax, %rsi
-	jg	.L14
-	rep; ret
-.L15:
+	jg	.L18
+	rep ret
+.L19:
 	vmovsd	.LC0(%rip), %xmm0
 	ret
 
@@ -77,19 +77,19 @@ t2:
 
 aprod3:
 	testq	%rsi, %rsi
-	jle	.L20
+	jle	.L25
 	vmovsd	.LC0(%rip), %xmm0
 	movl	$0, %eax
-.L19:
+.L24:
 	vmovsd	(%rdi,%rax,8), %xmm1
 	vmulsd	8(%rdi,%rax,8), %xmm1, %xmm1
 	vmulsd	16(%rdi,%rax,8), %xmm1, %xmm1
 	vmulsd	%xmm1, %xmm0, %xmm0
 	addq	$3, %rax
 	cmpq	%rax, %rsi
-	jg	.L19
-	rep; ret
-.L20:
+	jg	.L24
+	rep ret
+.L25:
 	vmovsd	.LC0(%rip), %xmm0
 	ret
 
@@ -102,19 +102,19 @@ t3:
 
 aprod4:
 	testq	%rsi, %rsi
-	jle	.L25
+	jle	.L31
 	vmovsd	.LC0(%rip), %xmm0
 	movl	$0, %eax
-.L24:
+.L30:
 	vmovsd	8(%rdi,%rax,8), %xmm1
 	vmulsd	16(%rdi,%rax,8), %xmm1, %xmm1
 	vmulsd	(%rdi,%rax,8), %xmm1, %xmm1
 	vmulsd	%xmm1, %xmm0, %xmm0
 	addq	$3, %rax
 	cmpq	%rax, %rsi
-	jg	.L24
-	rep; ret
-.L25:
+	jg	.L30
+	rep ret
+.L31:
 	vmovsd	.LC0(%rip), %xmm0
 	ret
 
@@ -127,19 +127,19 @@ t4:
 
 aprod5:
 	testq	%rsi, %rsi
-	jle	.L30
+	jle	.L37
 	vmovsd	.LC0(%rip), %xmm0
 	movl	$0, %eax
-.L29:
+.L36:
 	vmulsd	(%rdi,%rax,8), %xmm0, %xmm0
 	vmovsd	8(%rdi,%rax,8), %xmm1
 	vmulsd	16(%rdi,%rax,8), %xmm1, %xmm1
-	vmulsd	%xmm1, %xmm0, %xmm0
+	vmulsd	%xmm0, %xmm1, %xmm0
 	addq	$3, %rax
 	cmpq	%rax, %rsi
-	jg	.L29
-	rep; ret
-.L30:
+	jg	.L36
+	rep ret
+.L37:
 	vmovsd	.LC0(%rip), %xmm0
 	ret
 

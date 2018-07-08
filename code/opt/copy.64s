@@ -10,88 +10,94 @@ write_read:
 	subq	$1, %rdx
 	jne	.L3
 .L1:
-	rep; ret
+	rep ret
 array_copy:
 	testq	%rdx, %rdx
-	jle	.L4
+	jle	.L5
 	movl	$0, %eax
-.L6:
+.L7:
 	movq	(%rdi,%rax,8), %rcx
 	movq	%rcx, (%rsi,%rax,8)
 	addq	$1, %rax
-	cmpq	%rdx, %rax
-	jne	.L6
-.L4:
-	rep; ret
+	cmpq	%rax, %rdx
+	jne	.L7
+.L5:
+	rep ret
 array_clear:
 	testq	%rdx, %rdx
-	jle	.L7
+	jle	.L9
 	movq	%rsi, %rax
 	leaq	(%rsi,%rdx,8), %rdx
-.L9:
+.L11:
 	movq	$0, (%rax)
 	addq	$8, %rax
 	cmpq	%rdx, %rax
-	jne	.L9
-.L7:
-	rep; ret
+	jne	.L11
+.L9:
+	rep ret
 array_copy_2:
 	leaq	-1(%rdx), %r8
 	testq	%r8, %r8
-	jle	.L15
+	jle	.L18
 	movl	$0, %eax
-.L12:
+.L15:
 	movq	(%rdi,%rax,8), %rcx
 	movq	%rcx, (%rsi,%rax,8)
 	movq	8(%rdi,%rax,8), %rcx
 	movq	%rcx, 8(%rsi,%rax,8)
 	addq	$2, %rax
 	cmpq	%rax, %r8
-	jg	.L12
-	jmp	.L11
-.L15:
+	jg	.L15
+	leaq	-2(%rdx), %rax
+	shrq	%rax
+	leaq	2(%rax,%rax), %rax
+	jmp	.L14
+.L18:
 	movl	$0, %eax
-.L11:
-	cmpq	%rax, %rdx
-	jle	.L10
 .L14:
+	cmpq	%rax, %rdx
+	jle	.L13
+.L19:
 	movq	(%rdi,%rax,8), %rcx
 	movq	%rcx, (%rsi,%rax,8)
 	addq	$1, %rax
-	cmpq	%rdx, %rax
-	jne	.L14
-.L10:
-	rep; ret
+	cmpq	%rax, %rdx
+	jne	.L19
+.L13:
+	rep ret
 array_clear_2:
 	leaq	-1(%rdx), %rcx
 	testq	%rcx, %rcx
-	jle	.L21
+	jle	.L27
 	movl	$0, %eax
-.L18:
+.L24:
 	movq	$0, (%rsi,%rax,8)
 	movq	$0, 8(%rsi,%rax,8)
 	addq	$2, %rax
 	cmpq	%rax, %rcx
-	jg	.L18
-	jmp	.L17
-.L21:
+	jg	.L24
+	leaq	-2(%rdx), %rax
+	shrq	%rax
+	leaq	2(%rax,%rax), %rax
+	jmp	.L23
+.L27:
 	movl	$0, %eax
-.L17:
+.L23:
 	cmpq	%rax, %rdx
-	jle	.L16
-.L20:
+	jle	.L22
+.L28:
 	movq	$0, (%rsi,%rax,8)
 	addq	$1, %rax
-	cmpq	%rdx, %rax
-	jne	.L20
-.L16:
-	rep; ret
+	cmpq	%rax, %rdx
+	jne	.L28
+.L22:
+	rep ret
 array_copy_4:
 	leaq	-3(%rdx), %r8
 	testq	%r8, %r8
-	jle	.L27
+	jle	.L36
 	movl	$0, %eax
-.L24:
+.L33:
 	movq	(%rdi,%rax,8), %rcx
 	movq	%rcx, (%rsi,%rax,8)
 	movq	8(%rdi,%rax,8), %rcx
@@ -102,72 +108,72 @@ array_copy_4:
 	movq	%rcx, 24(%rsi,%rax,8)
 	addq	$4, %rax
 	cmpq	%rax, %r8
-	jg	.L24
-	jmp	.L23
-.L27:
+	jg	.L33
+	jmp	.L32
+.L36:
 	movl	$0, %eax
-.L23:
+.L32:
 	cmpq	%rax, %rdx
-	jle	.L22
-.L26:
+	jle	.L31
+.L37:
 	movq	(%rdi,%rax,8), %rcx
 	movq	%rcx, (%rsi,%rax,8)
 	addq	$1, %rax
-	cmpq	%rdx, %rax
-	jne	.L26
-.L22:
-	rep; ret
+	cmpq	%rax, %rdx
+	jne	.L37
+.L31:
+	rep ret
 array_clear_3:
 	leaq	-2(%rdx), %rcx
 	testq	%rcx, %rcx
-	jle	.L33
+	jle	.L45
 	movl	$0, %eax
-.L30:
+.L42:
 	movq	$0, (%rsi,%rax,8)
 	movq	$0, 8(%rsi,%rax,8)
 	movq	$0, 16(%rsi,%rax,8)
 	addq	$3, %rax
 	cmpq	%rax, %rcx
-	jg	.L30
-	jmp	.L29
-.L33:
+	jg	.L42
+	jmp	.L41
+.L45:
 	movl	$0, %eax
-.L29:
+.L41:
 	cmpq	%rax, %rdx
-	jle	.L28
-.L32:
+	jle	.L40
+.L46:
 	movq	$0, (%rsi,%rax,8)
 	addq	$1, %rax
-	cmpq	%rdx, %rax
-	jne	.L32
-.L28:
-	rep; ret
+	cmpq	%rax, %rdx
+	jne	.L46
+.L40:
+	rep ret
 array_clear_4:
 	leaq	-3(%rdx), %rcx
 	testq	%rcx, %rcx
-	jle	.L39
+	jle	.L54
 	movl	$0, %eax
-.L36:
+.L51:
 	movq	$0, (%rsi,%rax,8)
 	movq	$0, 8(%rsi,%rax,8)
 	movq	$0, 16(%rsi,%rax,8)
 	movq	$0, 24(%rsi,%rax,8)
 	addq	$4, %rax
 	cmpq	%rax, %rcx
-	jg	.L36
-	jmp	.L35
-.L39:
+	jg	.L51
+	jmp	.L50
+.L54:
 	movl	$0, %eax
-.L35:
+.L50:
 	cmpq	%rax, %rdx
-	jle	.L34
-.L38:
+	jle	.L49
+.L55:
 	movq	$0, (%rsi,%rax,8)
 	addq	$1, %rax
-	cmpq	%rdx, %rax
-	jne	.L38
-.L34:
-	rep; ret
+	cmpq	%rax, %rdx
+	jne	.L55
+.L49:
+	rep ret
 test2a:
 	subq	$8, %rsp
 	movq	%rdi, %rdx
@@ -219,54 +225,54 @@ mem_clear:
 
 copy_array:
 	testq	%rdx, %rdx
-	jle	.L50
+	jle	.L68
 	movl	$0, %eax
-.L52:
+.L70:
 	movq	(%rdi,%rax,8), %rcx
 	movq	%rcx, (%rsi,%rax,8)
 	addq	$1, %rax
-	cmpq	%rdx, %rax
-	jne	.L52
-.L50:
-	rep; ret
+	cmpq	%rax, %rdx
+	jne	.L70
+.L68:
+	rep ret
 clear_array:
 	testq	%rsi, %rsi
-	jle	.L53
+	jle	.L72
 	movq	%rdi, %rax
 	leaq	(%rdi,%rsi,8), %rdx
-.L55:
+.L74:
 	movq	$0, (%rax)
 	addq	$8, %rax
 	cmpq	%rdx, %rax
-	jne	.L55
-.L53:
-	rep; ret
+	jne	.L74
+.L72:
+	rep ret
 clear_array_4:
 	leaq	-3(%rsi), %rdx
 	testq	%rdx, %rdx
-	jle	.L61
+	jle	.L81
 	movl	$0, %eax
-.L58:
+.L78:
 	movq	$0, (%rdi,%rax,8)
 	movq	$0, 8(%rdi,%rax,8)
 	movq	$0, 16(%rdi,%rax,8)
 	movq	$0, 24(%rdi,%rax,8)
 	addq	$4, %rax
 	cmpq	%rax, %rdx
-	jg	.L58
-	jmp	.L57
-.L61:
+	jg	.L78
+	jmp	.L77
+.L81:
 	movl	$0, %eax
-.L57:
+.L77:
 	cmpq	%rax, %rsi
-	jle	.L56
-.L60:
+	jle	.L76
+.L82:
 	movq	$0, (%rdi,%rax,8)
 	addq	$1, %rax
-	cmpq	%rsi, %rax
-	jne	.L60
-.L56:
-	rep; ret
+	cmpq	%rax, %rsi
+	jne	.L82
+.L76:
+	rep ret
 main:
 	pushq	%r13
 	pushq	%r12
@@ -279,8 +285,8 @@ main:
 	call	find_cpe
 	movl	$0, %ebp
 	movl	$test_descr, %r13d
-	jmp	.L63
-.L66:
+	jmp	.L86
+.L87:
 	movq	case_descr(%rbx), %rcx
 	movq	%r12, %rdx
 	movl	$.LC0, %esi
@@ -297,15 +303,15 @@ main:
 	call	__printf_chk
 	addq	$8, %rbx
 	cmpq	$32, %rbx
-	jne	.L66
+	jne	.L87
 	addq	$1, %rbp
 	cmpq	$9, %rbp
-	je	.L65
-.L63:
+	je	.L88
+.L86:
 	movl	$0, %ebx
 	movq	0(%r13,%rbp,8), %r12
-	jmp	.L66
-.L65:
+	jmp	.L87
+.L88:
 	movl	$0, %eax
 	addq	$8, %rsp
 	popq	%rbx
