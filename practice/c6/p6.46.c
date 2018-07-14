@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define N 1024 // worst case
+#define N 1111 
 #define LEN N*N
 #define LIMIT 20
 #define LOOP 100
@@ -43,8 +43,8 @@ int main()
 {
   int *dst = (int*)malloc(sizeof(int) * LEN);
   int *src = (int*)malloc(sizeof(int) * LEN);
-  int trials[LIMIT] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, \
-                       13, 14, 15, 16, 17, 18, 400, 1024};
+  int trials[LIMIT] = {1, 10, 20, 30, 40, 50, 60, 70, 80, 90, \
+                       100, 110, 120, 130, 140, 150, 160, 170, 400, N};
   clock_t t;
 
   if (!dst || !src) {
