@@ -20,8 +20,35 @@ int is_transpose(int M, int N, int A[N][M], int B[M][N]);
  *     be graded. 
  */
 char transpose_submit_desc[] = "Transpose submission";
+
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#define BROW	8
+#define BCOL	8
 void transpose_submit(int M, int N, int A[N][M], int B[M][N])
 {
+	// for the M = 32 and N = 32 case
+	int br, bc, i, r0, r1, r2, r3, r4, r5, r6, r7;
+	for (br = 0; br < N; br += BROW)
+		for (bc = 0; bc < M; bc += BCOL)
+			for (i = br; i < MIN(br + BROW, N); ++i) {
+					r0 = A[i][bc];
+					r1 = A[i][bc+1];
+					r2 = A[i][bc+2];
+					r3 = A[i][bc+3];
+					r4 = A[i][bc+4];
+					r5 = A[i][bc+5];
+					r6 = A[i][bc+6];
+					r7 = A[i][bc+7];
+					B[bc][i] = r0;
+					B[bc+1][i] = r1;
+					B[bc+2][i] = r2;
+					B[bc+3][i] = r3;
+					B[bc+4][i] = r4;
+					B[bc+5][i] = r5;
+					B[bc+6][i] = r6;
+					B[bc+7][i] = r7;
+				}
+
 }
 
 /* 
