@@ -157,7 +157,7 @@ void transpose_submit(int M, int N, int A[N][M], int B[M][N])
 					}
 				}
 			}
-	} else if (M == 67) {
+	} else {
 		for (br = 0; br + 9 < N; br += 9) {
 			for (bc = 0; bc + 9 < M; bc += 9) {
 				for (i = br; i < br + 9; ++i) {
@@ -206,106 +206,11 @@ void transpose_submit(int M, int N, int A[N][M], int B[M][N])
 			}
 		}
 
-		// for (i = bc; i < M; ++i) {
-		// 	for (br = 0; br + BSIZE1 < N; br += BSIZE1) {
-		// 			r0 = A[br][i];
-		// 			r1 = A[br+1][i];
-		// 			r2 = A[br+2][i];
-		// 			r3 = A[br+3][i];
-		// 			r4 = A[br+4][i];
-		// 			r5 = A[br+5][i];
-		// 			r6 = A[br+6][i];
-		// 			r7 = A[br+7][i];
-		// 			B[i][br] = r0;
-		// 			B[i][br+1] = r1;
-		// 			B[i][br+2] = r2;
-		// 			B[i][br+3] = r3;
-		// 			B[i][br+4] = r4;
-		// 			B[i][br+5] = r5;
-		// 			B[i][br+6] = r6;
-		// 			B[i][br+7] = r7;
-		// 	}
-		// }
-
 		for (br = 0; br < N; ++br)
 			for (i = bc; i < M; ++i)
 				B[i][br] = A[br][i];
 	
-	} else {
-		for (br = 0; br + BSIZE < N; br += BSIZE) {
-			for (bc = 0; bc + BSIZE < M; bc += BSIZE) {
-				for (i = br; i < br + BSIZE; ++i) {
-					r0 = A[i][bc];
-					r1 = A[i][bc+1];
-					r2 = A[i][bc+2];
-					r3 = A[i][bc+3];
-					r4 = A[i][bc+4];
-					r5 = A[i][bc+5];
-					r6 = A[i][bc+6];
-					r7 = A[i][bc+7];
-					bcol = A[i][bc+8];
-					B[bc][i] = r0;
-					B[bc+1][i] = r1;
-					B[bc+2][i] = r2;
-					B[bc+3][i] = r3;
-					B[bc+4][i] = r4;
-					B[bc+5][i] = r5;
-					B[bc+6][i] = r6;
-					B[bc+7][i] = r7;
-					B[bc+8][i] = bcol;
-				}
-			}
-		}
-		for (bc = 0; bc + BSIZE < M; bc += BSIZE) {
-			for (i = br; i < N; ++i) {
-					r0 = A[i][bc];
-					r1 = A[i][bc+1];
-					r2 = A[i][bc+2];
-					r3 = A[i][bc+3];
-					r4 = A[i][bc+4];
-					r5 = A[i][bc+5];
-					r6 = A[i][bc+6];
-					r7 = A[i][bc+7];
-					bcol = A[i][bc+8];
-					B[bc][i] = r0;
-					B[bc+1][i] = r1;
-					B[bc+2][i] = r2;
-					B[bc+3][i] = r3;
-					B[bc+4][i] = r4;
-					B[bc+5][i] = r5;
-					B[bc+6][i] = r6;
-					B[bc+7][i] = r7;
-					B[bc+8][i] = bcol;
-			}
-		}
-		
-		for (i = bc; i < M; ++i) {
-			for (br = 0; br + BSIZE < N; br += BSIZE) {
-					r0 = A[br][i];
-					r1 = A[br+1][i];
-					r2 = A[br+2][i];
-					r3 = A[br+3][i];
-					r4 = A[br+4][i];
-					r5 = A[br+5][i];
-					r6 = A[br+6][i];
-					r7 = A[br+7][i];
-					bcol = A[br+8][i];
-					B[i][br] = r0;
-					B[i][br+1] = r1;
-					B[i][br+2] = r2;
-					B[i][br+3] = r3;
-					B[i][br+4] = r4;
-					B[i][br+5] = r5;
-					B[i][br+6] = r6;
-					B[i][br+7] = r7;
-					B[i][br+8] = bcol;
-			}
-		}
-
-		for (; br < N; ++br)
-			for (; bc < M; ++bc)
-				B[bc][br] = A[br][bc];
-	}
+	} 
 }
 
 
