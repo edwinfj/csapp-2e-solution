@@ -1,0 +1,3 @@
+gcc p.o -lx
+gcc p.o -lx -ly -lx
+gcc p.o -lx -ly -lx -lz

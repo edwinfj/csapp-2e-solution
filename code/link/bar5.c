@@ -1,6 +1,6 @@
 /* $begin bar5 */
 /* bar5.c */ 
-double x; 
+static double x; 
  
 void f()  
 { 

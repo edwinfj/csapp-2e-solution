@@ -1,0 +1,9 @@
+A.
+libc.a 1605
+libm.a 439
+B.
+y
+C.
+linux-vdso.so
+libc.so
+ld-linux-x86-64.so
