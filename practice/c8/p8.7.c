@@ -5,7 +5,7 @@
 #include "csapp.h"
 
 /*
- * The difference from p8.5.c is that p8.5 uses default handler
+ * the difference from p8.5.c is that p8.5 uses default handler
  * which terminates the calling process immediately.
  * With custom handler, the remaining code of the calling process will be
  * executed.

@@ -7,7 +7,7 @@ void sig_handler(int signum)
 	pid_t pid;
 
 	while ((pid = waitpid(-1, NULL, 0)) > 0)
-		printf("reaped one child %d\n", pid);
+		printf("reaped one child %d", pid);
 
 	if (errno != ECHILD)
 		unix_error("process reap error\n");

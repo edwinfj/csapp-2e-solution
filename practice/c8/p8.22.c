@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <sys/types.h>
-#include <wait.h>
+#include <sys/wait.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -13,10 +13,6 @@ void unit_error(const char *msg)
 	exit(0);
 }
 
-typedef void (*handler_t)(int);
-handler_t Signal(int signum, handler_t *handler)
-{
-}
 
 void ret_handler(int signum)
 {
@@ -46,16 +42,18 @@ int mysystem(char *command)
 		printf("this line should never be printed\n");
 	} 
 	
-	if (waitpid(pid, &status, 0) < 0)
+	if (waitpid(pid, &status, 0) < 0) {
 		unit_error("waitpid error");
+		exit(1);
+	}
 
 	if (WIFEXITED(status)) {
 		printf("pid returned normally\n");
 		return WEXITSTATUS(status);
 	}
-	else {
+	if (WIFSIGNALED(status)) {
 		printf("pid return abnormally\n");
-		return WEXITSTATUS(status);
+		return WTERMSIG(status);
 	}
 }
 	

@@ -65,8 +65,6 @@ int main()
 	ret = tfgets(str, MAXLINE, stdin);
 	if (ret)
 		printf("%s", str);
-	else
-		printf("NULL returned\n");
 
 	return 0;
 }

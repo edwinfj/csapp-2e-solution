@@ -1,5 +1,8 @@
 #include <unistd.h>
 #include <stdio.h>
+#include <string.h>
+#include <errno.h>
+#include <stdlib.h>
 
 extern char **environ;
 
@@ -16,7 +19,10 @@ int main(int argc, char *argv[], char *envp[])
 	for (i = 0; envp[i]; ++i)
 		printf("%s\n", envp[i]);
 
-	execve(exec_file, argv, environ);
+	if (execve(exec_file, argv, environ) == -1) {
+		fprintf(stderr, "execve error: %s\n", strerror(errno));
+		exit(1);
+	}
 
 	return 0;
 }

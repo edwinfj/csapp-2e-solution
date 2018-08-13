@@ -13,7 +13,7 @@ unsigned int snooze(unsigned int secs)
 
 int main(int argc, char *argv[])
 {
-	snooze(atoi(argv[1]));
+	snooze(atoi(argv[1]);
 
 	return 0;
 }
