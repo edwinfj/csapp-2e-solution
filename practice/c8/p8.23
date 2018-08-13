@@ -1,0 +1,1 @@
+when the first SIGUSR2 is sent to the parent, parent receives it and handles it. Then the second SIGUSR2 is comming, and is pending. Then, all latter 3 SIGUSR2 came and are not queued and ignored. Then handler is only triggered twice.
