@@ -1,0 +1,4 @@
+int fd = open(input_file, O_RDONLY, 0);
+dup(fd, 0);
+close(fd);
+

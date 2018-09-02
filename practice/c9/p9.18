@@ -1,0 +1,1 @@
+use the second last bit in the header to indicate if the previous block is free or occupied.
