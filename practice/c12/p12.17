@@ -1,0 +1,2 @@
+the main thread calls exit and kills the peer threads
+pthread_exit(NULL)

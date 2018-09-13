@@ -1,0 +1,19 @@
+sem_t mutex = 1;
+
+void reader(void)
+{
+	while(1) {
+		P(&mutex);
+		/ * reading */
+		V(&mutex);
+	}
+}
+
+void writer(void)
+{
+	while(1) {
+		P(&mutex);
+		/* writing */
+		V(&mutex);
+	}
+}

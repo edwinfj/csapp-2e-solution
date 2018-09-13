@@ -23,10 +23,8 @@ int main(int argc, char **argv)
     while (1) {
 	ready_set = read_set;
 	Select(listenfd+1, &ready_set, NULL, NULL, NULL); //line:conc:select:select
-	if (FD_ISSET(STDIN_FILENO, &ready_set)) {//line:conc:select:stdinready
-        printf("STDIN_FILENO opened\n");
+	if (FD_ISSET(STDIN_FILENO, &ready_set)) //line:conc:select:stdinready
 	    command(); /* Read command line from stdin */
-    }
 	if (FD_ISSET(listenfd, &ready_set)) { //line:conc:select:listenfdready
             clientlen = sizeof(struct sockaddr_storage); 
 	    connfd = Accept(listenfd, (SA *)&clientaddr, &clientlen);

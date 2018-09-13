@@ -1,0 +1,11 @@
+
+void writer(void)
+{
+	while(1) {
+		if (readcnt == 0) {
+			P(&w);
+			//
+			V(&w);
+		}
+	}
+}

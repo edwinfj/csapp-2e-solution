@@ -1,0 +1,3 @@
+A. no. even though the buf is shared by multiple threads, the p will never access the same bucket that c is accessing, because this situation is protected by slots and items semaphores.
+B. no
+C. yes. two different p/c can access the same bucket at the same time, creating issues.

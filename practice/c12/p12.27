@@ -1,0 +1,1 @@
+fclose will close the underlying file descriptor associated with the stream. the behaviour of the second fclose is undefined. If another fd is open in another thread between the two fclose, the second fclose may accidentally close the just opened fd.

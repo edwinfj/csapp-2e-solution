@@ -1,0 +1,2 @@
+pass the value of i to pthread_create
+the disadvantage is that it assumes sizeof(void *) >= sizeof(int)

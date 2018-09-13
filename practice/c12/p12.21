@@ -1,0 +1,36 @@
+int readcnt = 0, writecnt = 0;
+sem_t rmtx = 1, wmtx = 1, w = 1;
+
+void read(void)
+{
+	while (1) {
+		if (writecnt == 0) {
+			P(&rmtx);
+			readcnt++;
+			if (readcnt == 1)
+				P(&w);
+			V(&rmtx);
+			/* reading */
+			P(&rmtx);
+			readcnt--;
+			if (readcnt == 0)
+				V(&w);
+			V(&rmt);
+		}
+	}
+}
+
+void write(void)
+{
+	while (1) {
+		P(&wmtx);
+		writecnt++;
+		V(&wmtx);
+		P(&w);
+		/* writing */
+		V(&w);
+		P(&wmtx);
+		writecnt--;
+		V(&wmtx);
+	}
+}

@@ -1,0 +1,1 @@
+the problem will be triggered when read and write are interleaved if we use buffered read and write. However, here there is only write, so it's fine. Besides, fflush is used to make sure all bytes are sent out, before a potential read happens.

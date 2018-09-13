@@ -1,0 +1,2 @@
+no
+thread 1 requires only one shared semaphore to proceed.

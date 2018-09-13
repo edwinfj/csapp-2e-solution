@@ -1,0 +1,1 @@
+it accesses shared data byte_cnt, not reentrant. Even though the shared data is procted by mutex, if connfd is shared between multiple threads, data race occurs. It's caller's responsibility to make sure connfd is not shared. therefore it's not thread safe.
